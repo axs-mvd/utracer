@@ -1,0 +1,88 @@
+
+[[Why?]]
+
+    I needed a mix between a profiler, debugger and log in Linux, so... I made this. 
+
+    How many times did you do something like this:
+
+    void function() {
+        long prev = get_current_time();
+        ...
+        //do something 
+        ...
+        long post = get_current_time();
+
+        cout << "function took: " << post - prev << "ms. " << endl;
+    }
+
+    If the answer is `many' then utracer is (will be) for you!
+
+[[What?]]
+
+    utracer is a framework to do dynamic tracing of your applications, it allows you to put "probes" in key points of your code in order to measure: compute time, cpu usage, memory or custom values. In runtime you can "query" some of those probes to get what you need. The probes do not "trigger" if you don't query them allowing to use utracer on production systems.
+
+    Example:
+
+    [axs@wagner ~]$ ./subject &
+    
+    [axs@wagner ~]$ utrace 9999 127.0.0.1 2222 --notimestamp --nothreadid TEST_PROBE::INTEGER
+    probing: 127.0.0.1:2222
+            TEST_PROBE::INTEGER
+
+    20 
+    21 
+    22 
+    23 
+    ^C
+    [axs@wagner ~]$ utrace 9999 127.0.0.1 2222 --notimestamp --nothreadid TEST_PROBE::INTEGER
+    probing: 127.0.0.1:2222
+            TEST_PROBE::INTEGER
+
+    26 
+    27 
+    28 
+    29 
+    ^C
+    [axs@wagner ~]$ utrace 9999 127.0.0.1 2222 --notimestamp --nothreadid TEST_PROBE::ONE TEST_PROBE::INTEGER
+    probing: 127.0.0.1:2222
+            TEST_PROBE::ONE
+            TEST_PROBE::INTEGER
+
+    18446744072947120567 35 
+    18446744072947124568 36 
+    18446744072947128569 37 
+    ^C
+
+    It will be brain dead simple, unobtrusive and with small footprint (with time we will get there)
+
+[[How]]
+
+    * include the probe.hh file in your project
+    * link dynamically to utracer.so
+    * use utracer to get the data!
+
+    If you want to see it in action take a look at subject.cc to get a sample :P.
+
+[[Install]]
+
+    Use the makefile.
+
+[[Use]]
+    
+    See subject.cc to get an idea of how it works.
+
+[[Help Me]
+
+    Fork it in github and start hacking!
+
+[[Wish List]]
+    
+    * More Testing, would be great if someone wrote some clever test to spot and fix the unknown bugs that lurks in the code.
+    * Somehow there is a problem when using x86 32 bits, please check this.
+    * A clever way to translate from a pid to a udp port. This is a show stopper because it always use the port 2222 :S meaning that currently you can't run two programs using utracer.
+    * Multiplatform (currently pthreads and udp needs to migrate to something in boost, but I'm afraid to gain too much overbloat, so let me think about it)
+    * Benchmarks of different levels of use of utracer.
+    * Proper README.
+    * Real-time visualization client. 
+    
+    
