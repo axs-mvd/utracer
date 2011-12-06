@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include <sys/time.h>
+#include <unistd.h>
 
 #include <iostream>
 
@@ -45,6 +46,8 @@ int receive_from(int socket_fd, char *data, int data_length);
 
 /** returns time in milliseconds */
 long tick();
+
+long get_port();
 
 bool ready_to_read(int sockfd);
 

@@ -117,6 +117,11 @@ long tick() {
     return (long)(start.tv_sec*1000 + (int)start.tv_usec/1000);
 }
 
+long get_port() {
+    long pid = getpid();
+    return pid + 1024 % 32000;
+}
+
 bool ready_to_read(int sockfd) {
     fd_set read_set;
     struct timeval tv;

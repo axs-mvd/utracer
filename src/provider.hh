@@ -93,7 +93,7 @@ private:
     char *_buff;
 
     provider() {
-        _listen_port     = 2222;
+        _listen_port     = get_port();;
         _shutdown_thread = false;
         _buff = new char[_buff_size];
         start();
